@@ -1,10 +1,11 @@
 const express = require('express')
 const app = express()
-
+const cors = require("cors");
 const {initializeDatabase} = require("./db/db.connect")
 const Book = require("./models/books.models")
 initializeDatabase()
 
+app.use(cors())
 app.use(express.json())
 
 // 1.create a new book data in the books Database
