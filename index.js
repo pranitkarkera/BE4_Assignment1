@@ -114,16 +114,21 @@ app.get('/books/author/:authorName',async(req, res)=> {
 
 async function readBooksByGenre(genreName) {
     try {
-        const allBooks = await Book.find({genre: genreName})
+        const allBooks = await Book.find({ genre: { $in: [genreName] } });
+        // console.log(allBooks,genreName)
         return allBooks
     } catch (error) {
+        // console.log(error)
         throw error
     }
 }
 
 app.get('/books/genre/:genreName',async(req, res)=> {
     try{
+        // console.log("pranit")
+        // console.log(req.params.genreName)
         const books = await readBooksByGenre(req.params.genreName)
+        
         if(books.length != 0){
             res.json(books)
         }else{
@@ -135,7 +140,7 @@ app.get('/books/genre/:genreName',async(req, res)=> {
 })
 
 //7. get all the books which was released in the year 2012.
-async function readBooksByGenre(yearDetail) {
+async function readBooksByYear(yearDetail) {
     try {
         const allBooks = await Book.find({publishedYear: yearDetail})
         return allBooks
@@ -146,7 +151,7 @@ async function readBooksByGenre(yearDetail) {
 
 app.get('/books/year/:yearDetail',async(req, res)=> {
     try{
-        const books = await readBooksByGenre(req.params.yearDetail)
+        const books = await readBooksByYear(req.params.yearDetail)
         if(books.length != 0){
             res.json(books)
         }else{
@@ -168,7 +173,7 @@ async function updateBookById(bookId, dataToUpdate) {
     }
 }
 
-app.post('/books/:bookId', async(req, res)=> {
+app.post('/books/id/:bookId', async(req, res)=> {
     try{
         const updatedBook = await updateBookById(req.params.bookId, req.body)
         if(updatedBook){
@@ -185,7 +190,8 @@ app.post('/books/:bookId', async(req, res)=> {
 
 async function updateBookByTitle(bookTitle, dataToUpdate) {
     try{
-        const updatedBook = await Book.findOneAndUpdate({title: bookTitle}, dataToUpdate, {new: true, runValidators: true})
+        console.log(bookTitle, dataToUpdate)
+        const updatedBook = await Book.findOneAndUpdate({title: bookTitle}, dataToUpdate, {new: true})
         return updatedBook
     }catch(error){
         console.log("Error in updating book detail", error)
@@ -195,7 +201,8 @@ async function updateBookByTitle(bookTitle, dataToUpdate) {
 
 app.post('/books/:bookTitle', async(req, res)=> {
     try{
-        const updatedBook = await updateBookByTitle(parseInt(req.params.bookTitle), req.body)
+        const updatedBook = await updateBookByTitle(req.params.bookTitle, req.body)
+        console.log(req.params.bookTitle, req.body)
         if(updatedBook){
             res.status(200).json({message: "Book updated successfully", updatedBook: updatedBook})
         }else{

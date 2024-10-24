@@ -9,13 +9,13 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    publishedYear: {
-        type: Number,
-        required: true,
-    },
+    // publishedYear: {
+    //     type: Number,
+    //     required: true,
+    // },
     genre: [{
         type: String,
-        enum: ['Autobiography','Fiction','Business','Non-Fiction', 'Mystery', 'Thriller', 'Science Fiction', 'Fantasy', 'Romance', 'Historical', 'Biography', 'Self-help', 'Other'],
+        enum: ['Autobiography','Fiction','Business','Non-Fiction', 'Mystery', 'Thriller', 'Science Fiction', 'Fantasy', 'Romance', 'Historical', 'Biography', 'Self-Help', 'Other'],
         required: true,
     }],
     language: {
